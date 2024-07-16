@@ -1,0 +1,44 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+custom:
+  server:
+    domain: http://localhost:8080
+  signUp:
+    verificationToken:
+      lifespan: 86400
+      lifespan-prettyValue: 24 hours
+      url: /auth/verifyAccount/
+
+
+spring:
+  application:
+    name: OnlyDive
+  datasource:
+    url: jdbc:mysql://localhost:3307/OnlyDive-springApp
+    username: OnlyDive-springApp
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username: 4f4a3eae815b2f
+    password: b5ad54f9c02524
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+logging:
+  level:
+    org.springframework.security.web: DEBUG
