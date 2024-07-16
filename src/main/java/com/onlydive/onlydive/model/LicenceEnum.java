@@ -1,6 +1,9 @@
 package com.onlydive.onlydive.model;
 
 public enum LicenceEnum {
-    LOOSER,
-    GIMPSON;
+    LOOSER(0),
+    GIMPSON(1);
+
+    LicenceEnum(int i) {
+    }
 }

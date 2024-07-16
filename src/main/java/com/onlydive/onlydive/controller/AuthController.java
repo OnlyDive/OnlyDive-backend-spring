@@ -3,6 +3,7 @@ package com.onlydive.onlydive.controller;
 import com.onlydive.onlydive.dto.RegisterRequest;
 import com.onlydive.onlydive.exceptions.SpringOnlyDiveException;
 import com.onlydive.onlydive.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/signUp")
-    public ResponseEntity<String> signUp(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<String> signUp(@Valid @RequestBody RegisterRequest registerRequest) {
         authService.signUp(registerRequest);
         return new ResponseEntity<>("User Registration Successful", HttpStatus.OK);
     }

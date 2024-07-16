@@ -1,6 +1,7 @@
 package com.onlydive.onlydive.service;
 
 import com.onlydive.onlydive.dto.UserResponse;
+import com.onlydive.onlydive.exceptions.SpringOnlyDiveException;
 import com.onlydive.onlydive.mapper.UserMapper;
 import com.onlydive.onlydive.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -22,5 +23,11 @@ public class UsersService {
                 .stream()
                 .map(userMapper::mapToResponse)
                 .toList();
+    }
+
+    public UserResponse getUserById(Long id) {
+        return userRepository.findById(id).map(userMapper::mapToResponse).orElseThrow(
+                () -> new SpringOnlyDiveException("User with id " + id + " not found")
+        );
     }
 }

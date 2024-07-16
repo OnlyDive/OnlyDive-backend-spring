@@ -14,4 +14,14 @@ public class GlobalExceptionHandler {
         return status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(e.getMessage());
     }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException e) {
+        return status(HttpStatus.NOT_FOUND)
+                .body(e.getMessage());
+    }
+//    @ExceptionHandler(RuntimeException.class)
+//    public ResponseEntity<Object> handleRuntimeException(RuntimeException e) {
+//        return status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                .body(e.getMessage());
+//    }
 }
