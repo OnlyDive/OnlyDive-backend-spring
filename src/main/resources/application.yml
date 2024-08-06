@@ -11,6 +11,9 @@ custom:
       lifespan: 86400
       lifespan-prettyValue: 24 hours
       url: /auth/verifyAccount/
+  jwt:
+    secret-key: "ajwnddawdjaodoadoajdojawodjoajwdojeorjeojsjoejjewjojaldjaldaldajrojrpeoq[oeqwe[awedmsmcoeadkmfjeriwoskldmfjireowkdsmawodjoawdojdwa"
+    expiration-after-days: 2
 
 
 spring:
@@ -22,7 +25,7 @@ spring:
     password: password
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
