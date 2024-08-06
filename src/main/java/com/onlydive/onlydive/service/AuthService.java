@@ -1,23 +1,27 @@
 package com.onlydive.onlydive.service;
 
-import com.onlydive.onlydive.dto.RegisterRequest;
+import com.onlydive.onlydive.dto.LoginRequest;
+import com.onlydive.onlydive.dto.AuthResponse;
+import com.onlydive.onlydive.dto.RefreshTokenRequest;
+import com.onlydive.onlydive.dto.SignUpRequest;
 import com.onlydive.onlydive.exceptions.SpringOnlyDiveException;
 import com.onlydive.onlydive.model.NotificationEmail;
 import com.onlydive.onlydive.model.User;
 import com.onlydive.onlydive.model.VerificationToken;
 import com.onlydive.onlydive.repository.UserRepository;
 import com.onlydive.onlydive.repository.VerificationTokenRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
@@ -39,13 +43,17 @@ public class AuthService {
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
 
-    public void signUp(RegisterRequest registerRequest) {
+
+
+    public void signUp(SignUpRequest signUpRequest) {
         User user = new User();
-        user.setFirstName(registerRequest.getFirstName());
-        user.setLastName(registerRequest.getLastName());
-        user.setEmail(registerRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setFirstName(signUpRequest.getFirstName());
+        user.setLastName(signUpRequest.getLastName());
+        user.setEmail(signUpRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         user.setCreated(Instant.now());
         user.setActive(false);
 
@@ -95,5 +103,36 @@ public class AuthService {
 
         user.setActive(true);
         userRepository.save(user);
+    }
+
+    public AuthResponse login(LoginRequest loginRequest) {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(loginRequest.username(),
+                loginRequest.password());
+
+        authentication = authenticationManager.authenticate(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return  AuthResponse.builder()
+                .jwtToken(tokenService.generateJwtToken(authentication))
+                .refreshToken(tokenService.generateRefreshToken().getToken())
+                .user(loginRequest.username())
+                .expires(tokenService.getExpirationInDays().toInstant())
+                .build();
+    }
+
+    public AuthResponse refreshToken(RefreshTokenRequest refreshRequest) {
+        tokenService.validateRefreshToken(refreshRequest.refreshToken());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return AuthResponse.builder()
+                .jwtToken(tokenService.generateJwtToken(authentication))
+                .refreshToken(refreshRequest.refreshToken())
+                .user(refreshRequest.username())
+                .expires(tokenService.getExpirationInDays().toInstant())
+                .build();
+    }
+
+    public void deleteRefreshToken(RefreshTokenRequest refreshTokenRequest) {
+        tokenService.deleteRefreshToken(refreshTokenRequest.refreshToken());
     }
 }
