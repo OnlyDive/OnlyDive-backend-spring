@@ -26,6 +26,7 @@ public class User {
     @Column(unique = true, nullable = false)
     @Email
     private String email;
+    private String username;
     private String password;
     private Instant created;
     private boolean active;
