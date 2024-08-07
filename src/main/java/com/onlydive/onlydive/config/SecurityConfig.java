@@ -44,9 +44,10 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
                         .requestMatchers(
-                                "/api/v1/auth/**",
+                                "/**",  //leave if during test
+                                "/auth/**",
 
-                                //to zostawic bo to do dokumentacji
+                                //documentation stuff
                                 "/v2/api-docs/**",
                                 "/v3/api-docs/**",
                                 "/configuration/ui",
