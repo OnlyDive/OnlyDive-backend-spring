@@ -29,11 +29,12 @@ import java.util.stream.Collectors;
 public class JwtTokenVerifier extends OncePerRequestFilter {
     private final SecretKey secretKey;
 
-    /**This filter
+    /**this filter takes the header with the token, checks its correctness and expiration time.
+     * Then it takes the user data and authorities from it and sends it to the security context holder.
      *
-     * @param request
-     * @param response
-     * @param filterChain
+     * @param request : HttpServletRequest
+     * @param response : HttpServletResponse
+     * @param filterChain : FilterChain
      * @throws ServletException
      * @throws IOException
      */
