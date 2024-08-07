@@ -15,13 +15,11 @@ import java.util.HashSet;
 @Service
 @Scope("singleton")
 @Slf4j
-
 public class AppUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        com.onlydive.onlydive.model.User user =  userRepository.findByUsername(username).orElseThrow();
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new HashSet<>());
+        return userRepository.findByUsername(username).orElseThrow();
     }
 }

@@ -11,7 +11,9 @@ import com.onlydive.onlydive.model.VerificationToken;
 import com.onlydive.onlydive.repository.UserRepository;
 import com.onlydive.onlydive.repository.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +28,8 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Scope("singleton")
+@Slf4j
 public class AuthService {
 
     @Value("${custom.signUp.verificationToken.lifespan}")
