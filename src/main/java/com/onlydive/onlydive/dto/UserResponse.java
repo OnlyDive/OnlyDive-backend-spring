@@ -1,15 +1,7 @@
 package com.onlydive.onlydive.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserResponse {
-    private String firstName;
-    private String lastName;
-    private String licence;
-    private boolean active;
+@Builder
+public record UserResponse(String firstName, String lastName, String licence, boolean active){
 }
