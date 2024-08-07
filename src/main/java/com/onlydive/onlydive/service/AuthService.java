@@ -77,6 +77,11 @@ public class AuthService {
                         "This url is valid for "+verificationTokenLifespanPrettyValue), "Activation");
     }
 
+    /**generate verification token and set token, user , expiry date in it
+     *
+     * @param user : User from model
+     * @return token : String
+     */
     protected String generateVerificationToken(User user) {
         String token = UUID.randomUUID().toString();
 
@@ -109,6 +114,7 @@ public class AuthService {
         userRepository.save(user);
     }
 
+
     public AuthResponse login(LoginRequest loginRequest) {
         Authentication authentication = new UsernamePasswordAuthenticationToken(loginRequest.username(),
                 loginRequest.password());
@@ -138,5 +144,12 @@ public class AuthService {
 
     public void deleteRefreshToken(RefreshTokenRequest refreshTokenRequest) {
         tokenService.deleteRefreshToken(refreshTokenRequest.refreshToken());
+    }
+
+    public User getCurrentUser(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByUsername(username).orElseThrow(
+                () -> new SpringOnlyDiveException("User not found")
+        );
     }
 }
