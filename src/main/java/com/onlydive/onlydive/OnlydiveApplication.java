@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @EnableAsync
 @Import(OpenApiConfig.class)
-
 public class OnlydiveApplication {
 
 	public static void main(String[] args) {
