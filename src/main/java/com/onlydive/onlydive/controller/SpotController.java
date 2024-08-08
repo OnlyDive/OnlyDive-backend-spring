@@ -29,7 +29,7 @@ public class SpotController {
 
     @GetMapping("/get/{name}")
     public ResponseEntity<SpotResponse> getSpotByName(@PathVariable String name){
-        return status(HttpStatus.OK).body(spotService.getSpotByName(name));
+        return status(HttpStatus.OK).body(spotService.getSpotResponseByName(name));
     }
 
     @GetMapping("/get/all")
@@ -39,7 +39,7 @@ public class SpotController {
 
     @GetMapping("/get/byCoordinates")
     public ResponseEntity<List<SpotResponse>> getSpotsInAreaByCoordinates(@RequestBody MapCoordinatesRequest coordinatesRequest){
-        return status(HttpStatus.OK).body(spotService.getSpotsInAreaByCoordinates(coordinatesRequest));
+        return status(HttpStatus.OK).body(spotService.getSpotsResponsesInAreaByCoordinates(coordinatesRequest));
     }
 
     @DeleteMapping("/delete/{id}")

@@ -13,9 +13,8 @@ import org.mapstruct.Mapping;
 import java.util.Set;
 
 @Mapper(componentModel = "spring")
-@RequiredArgsConstructor
 public abstract class SpotMapper {
-    protected final DataMapper dataMapper = new DataMapper();
+    protected final DateMapper dateMapper = new DateMapper();
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "comments",ignore = true)
@@ -25,7 +24,7 @@ public abstract class SpotMapper {
 
     @Mapping(target = "commentCount",expression = "java(countComments(spot))")
     @Mapping(target = "creatorUsername",source = "creator.username")
-    @Mapping(target = "creationDate", expression = "java(dataMapper.mapToString(spot.getCreationDate()))")
+    @Mapping(target = "creationDate", expression = "java(dateMapper.mapToString(spot.getCreationDate()))")
     public abstract SpotResponse mapToResponse(Spot spot);
 
 
