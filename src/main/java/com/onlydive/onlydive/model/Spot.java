@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,7 +22,6 @@ public class Spot {
     private Double latitude;
     @Column(nullable = false)
     private Double longitude;
-    @Lob
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<SpotComment> comments;
     @ManyToOne(cascade = CascadeType.ALL)

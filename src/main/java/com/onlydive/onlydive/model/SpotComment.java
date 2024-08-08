@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,11 +16,12 @@ public class SpotComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private String title;
+    private String name;
+    @Lob
     private String description;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Spot spot;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
-
+    private Instant creationDate;
 }
