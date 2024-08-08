@@ -10,14 +10,12 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 @Mapper(componentModel = "spring")
 @RequiredArgsConstructor
 public abstract class SpotMapper {
+    protected final DataMapper dataMapper = new DataMapper();
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "comments",ignore = true)
@@ -27,7 +25,7 @@ public abstract class SpotMapper {
 
     @Mapping(target = "commentCount",expression = "java(countComments(spot))")
     @Mapping(target = "creatorUsername",source = "creator.username")
-    @Mapping(target = "creationDate", expression = "java(getDate(spot))")
+    @Mapping(target = "creationDate", expression = "java(dataMapper.mapToString(spot.getCreationDate()))")
     public abstract SpotResponse mapToResponse(Spot spot);
 
 
@@ -38,10 +36,4 @@ public abstract class SpotMapper {
         return (long) comments.size();
     }
 
-    protected String getDate(@NonNull Spot spot){
-        Instant date = spot.getCreationDate();
-        return DateTimeFormatter.ISO_LOCAL_DATE_TIME
-                .withZone(ZoneId.systemDefault())
-                .format(date);
-    }
 }
