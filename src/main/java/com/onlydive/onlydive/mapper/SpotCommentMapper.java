@@ -8,9 +8,9 @@ import com.onlydive.onlydive.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public abstract class SpotCommentMapper {
-    protected final DataMapper dataMapper = new DataMapper();
+    protected final DateMapper dateMapper = new DateMapper();
 
 
     @Mapping(target = "name",source = "request.name")
@@ -20,6 +20,6 @@ public abstract class SpotCommentMapper {
 
     @Mapping(target = "spotId", source = "spotComment.spot.id")
     @Mapping(target = "username", source = "spotComment.user.username")
-    @Mapping(target = "creationDate", expression = "java(dataMapper.mapToString(spotComment.getCreationDate()))")
+    @Mapping(target = "creationDate", expression = "java(dateMapper.mapToString(spotComment.getCreationDate()))")
     public abstract SpotCommentResponse mapToSpotCommentResponse(SpotComment spotComment);
 }
