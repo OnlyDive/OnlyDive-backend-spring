@@ -59,7 +59,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
         Date expire = claimsJws.getPayload().getExpiration();
         Date now = new Date();
 
-        if (now.before(expire)){
+        if (expire.before(now)){
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             filterChain.doFilter(request, response);
             return;

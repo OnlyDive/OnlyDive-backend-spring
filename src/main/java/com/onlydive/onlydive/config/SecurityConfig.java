@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
                         .requestMatchers(
-                                "/**",  //leave if during test
+//                                "/**",  //leave if during test
                                 "/auth/**",
 
                                 //documentation stuff

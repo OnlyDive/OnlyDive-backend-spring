@@ -1,9 +1,6 @@
 package com.onlydive.onlydive.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -18,4 +15,6 @@ public class RefreshToken {
     private Long id;
     private String token;
     private Instant createdDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 }

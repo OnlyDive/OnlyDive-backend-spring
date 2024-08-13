@@ -30,6 +30,7 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false)
     @Email
     private String email;
+    @Column(unique = true, nullable = false)
     private String username;
     private String password;
     private Instant created;

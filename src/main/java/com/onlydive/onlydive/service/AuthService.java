@@ -5,6 +5,7 @@ import com.onlydive.onlydive.dto.AuthResponse;
 import com.onlydive.onlydive.dto.RefreshTokenRequest;
 import com.onlydive.onlydive.dto.SignUpRequest;
 import com.onlydive.onlydive.exceptions.SpringOnlyDiveException;
+import com.onlydive.onlydive.exceptions.SpringOnlyDiveWebStatusException;
 import com.onlydive.onlydive.model.NotificationEmail;
 import com.onlydive.onlydive.model.User;
 import com.onlydive.onlydive.model.VerificationToken;
@@ -14,9 +15,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.authorization.AuthorizationResult;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -54,6 +60,7 @@ public class AuthService {
 
     public void signUp(SignUpRequest signUpRequest) {
         User user = new User();
+        user.setUsername(signUpRequest.getUsername());
         user.setFirstName(signUpRequest.getFirstName());
         user.setLastName(signUpRequest.getLastName());
         user.setEmail(signUpRequest.getEmail());
@@ -64,9 +71,8 @@ public class AuthService {
         try {
             userRepository.save(user);
         } catch (Exception e) {
-            throw new SpringOnlyDiveException("Email is already in use");
+            throw new SpringOnlyDiveException("Email or Username is already in use");
         }
-
 
         String token = generateVerificationToken(user);
 
@@ -120,18 +126,25 @@ public class AuthService {
                 loginRequest.password());
 
         authentication = authenticationManager.authenticate(authentication);
+
+        User user = (User) authentication.getPrincipal();
+
+        if (authentication.isAuthenticated() && !user.isActive()) {
+            throw new SpringOnlyDiveWebStatusException("User is not active", HttpStatus.UNAUTHORIZED);
+        }
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return  AuthResponse.builder()
                 .jwtToken(tokenService.generateJwtToken(authentication))
-                .refreshToken(tokenService.generateRefreshToken().getToken())
+                .refreshToken(tokenService.generateRefreshToken(user).getToken())
                 .user(loginRequest.username())
                 .expires(tokenService.getExpirationInDays().toInstant())
                 .build();
     }
 
     public AuthResponse refreshToken(RefreshTokenRequest refreshRequest) {
-        tokenService.validateRefreshToken(refreshRequest.refreshToken());
+        tokenService.validateRefreshToken(refreshRequest.refreshToken(), refreshRequest.username());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         return AuthResponse.builder()
@@ -143,11 +156,11 @@ public class AuthService {
     }
 
     public void deleteRefreshToken(RefreshTokenRequest refreshTokenRequest) {
-        tokenService.deleteRefreshToken(refreshTokenRequest.refreshToken());
+        tokenService.deleteRefreshToken(refreshTokenRequest.refreshToken(), refreshTokenRequest.username());
     }
 
     public User getCurrentUser(){
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName(); // todo getPrincipal() zamiast getName()
         return userRepository.findByUsername(username).orElseThrow(
                 () -> new SpringOnlyDiveException("User not found")
         );
