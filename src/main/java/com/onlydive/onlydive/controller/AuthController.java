@@ -36,7 +36,7 @@ public class AuthController {
                     .body("Account Activated Successfully");
     }
 
-    @PostMapping("/login")
+    @PostMapping("/logIn")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
         return new  ResponseEntity<>(authService.login(loginRequest),HttpStatus.OK);
     }
@@ -46,7 +46,7 @@ public class AuthController {
         return new ResponseEntity<>(authService.refreshToken(refreshTokenRequest),HttpStatus.OK);
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/logOut")
     public ResponseEntity<String> logout(@Validated @RequestBody RefreshTokenRequest refreshTokenRequest) {
         authService.deleteRefreshToken(refreshTokenRequest);
         return new ResponseEntity<>("Succesfully Logout", HttpStatus.ACCEPTED);
