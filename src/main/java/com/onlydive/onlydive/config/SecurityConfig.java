@@ -41,7 +41,7 @@ public class SecurityConfig {
                                                    DaoAuthenticationProvider provider,
                                                    SecretKey secretKey) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
+//                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
                         .requestMatchers(
 //                                "/**",  //leave if during test
