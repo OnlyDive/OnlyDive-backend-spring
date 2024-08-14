@@ -20,18 +20,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SpringOnlyDiveException.class)
     public ResponseEntity<Object> handleSpringOnlyDiveException(SpringOnlyDiveException e) {
         return status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(e.getMessage());
+                .body(getErrorsMap(e.getMessage()));
     }
     @ExceptionHandler(SpringOnlyDiveWebStatusException.class)
     public ResponseEntity<Object> handleSpringOnlyDiveWebStatusException(SpringOnlyDiveWebStatusException e) {
         return status(e.getStatus())
-                .body(e.getMessage());
+                .body(getErrorsMap(e.getMessage()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException e) {
         return status(HttpStatus.NOT_FOUND)
-                .body(e.getMessage());
+                .body(getErrorsMap(e.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -41,6 +41,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
+    private Map<String, List<String>> getErrorsMap(String error) {
+        return getErrorsMap(List.of(error));
+    }
     private Map<String, List<String>> getErrorsMap(List<String> errors) {
         Map<String, List<String>> errorResponse = new HashMap<>();
         errorResponse.put("errors", errors);
