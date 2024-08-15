@@ -37,7 +37,7 @@ import java.util.UUID;
 @Transactional
 @Scope("singleton")
 @Slf4j
-public class AuthService {
+public class AuthService { //todo add forgot password mechanism
 
     @Value("${custom.signUp.verificationToken.lifespan}")
     private int verificationTokenLifespan;
@@ -72,6 +72,8 @@ public class AuthService {
 
         verificationTokenRepository.deleteAll(verificationTokens);
         userRepository.deleteAll(existingUsers);
+
+        //todo send email(s) that the account has been deleted?
 
         return true;
     }
@@ -133,6 +135,8 @@ public class AuthService {
         if (verificationToken.getExpiryDate().isBefore(Instant.now())) {
             throw new SpringOnlyDiveException("Token is expired. Sign up again");
         }
+
+        //todo send email that the account has been verified?
 
         user.setActive(true);
         userRepository.save(user);
