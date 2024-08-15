@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -56,7 +57,24 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
 
+    private boolean usernameAndEmailInExpiredAccounts(User user) {
+        List<User> existingUsers = userRepository.findByUsernameOrEmail(user.getUsername(), user.getEmail());
 
+        for (User existingUser : existingUsers) {
+            if (existingUser.isActive()) return false;
+        }
+
+        List<VerificationToken> verificationTokens = verificationTokenRepository.findByUserIn(existingUsers);
+
+        for (VerificationToken verificationToken : verificationTokens) {
+            if (verificationToken.getExpiryDate().isAfter(Instant.now())) return false;
+        }
+
+        verificationTokenRepository.deleteAll(verificationTokens);
+        userRepository.deleteAll(existingUsers);
+
+        return true;
+    }
 
     public void signUp(SignUpRequest signUpRequest) {
         User user = new User();
@@ -68,11 +86,11 @@ public class AuthService {
         user.setCreated(Instant.now());
         user.setActive(false);
 
-        try {
-            userRepository.save(user);
-        } catch (Exception e) {
+        if (!usernameAndEmailInExpiredAccounts(user)) {
             throw new SpringOnlyDiveException("Email or Username is already in use");
         }
+
+        userRepository.save(user);
 
         String token = generateVerificationToken(user);
 
@@ -113,7 +131,7 @@ public class AuthService {
         }
 
         if (verificationToken.getExpiryDate().isBefore(Instant.now())) {
-            throw new SpringOnlyDiveException("Token is expired. Log in to request a new token");
+            throw new SpringOnlyDiveException("Token is expired. Sign up again");
         }
 
         user.setActive(true);
