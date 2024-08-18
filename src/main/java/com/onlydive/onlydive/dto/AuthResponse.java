@@ -1,10 +1,11 @@
 package com.onlydive.onlydive.dto;
 
 import lombok.Builder;
-import lombok.Data;
 
-import java.time.Instant;
+import java.util.Date;
+
 
 @Builder
-public record AuthResponse(String jwtToken, String refreshToken, String user, Instant expires) {
+public record AuthResponse(String jwtToken, String refreshToken,
+                           String user, Date expires) {
 }

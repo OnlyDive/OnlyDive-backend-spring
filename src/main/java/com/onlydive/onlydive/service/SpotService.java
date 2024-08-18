@@ -31,9 +31,9 @@ public class SpotService {
         return spotMapper.mapToResponse(spot);
     }
 
-    public SpotResponse getSpotResponseByName(String name) {
-        Spot spot = spotRepository.findByName(name).orElseThrow(
-                () -> new SpringOnlyDiveException("Spot with name " + name + " not found")
+    public SpotResponse getSpotResponseById(Long id) {
+        Spot spot = spotRepository.findById(id).orElseThrow(
+                () -> new SpringOnlyDiveException("Spot with id " + id + " not found")
         );
         return spotMapper.mapToResponse(spot);
     }

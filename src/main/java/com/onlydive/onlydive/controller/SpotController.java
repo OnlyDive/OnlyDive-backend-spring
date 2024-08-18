@@ -27,9 +27,9 @@ public class SpotController {
         return status(HttpStatus.CREATED).body(spotService.createSpot(spotDto));
     }
 
-    @GetMapping("/get/{name}")
-    public ResponseEntity<SpotResponse> getSpotByName(@PathVariable String name){
-        return status(HttpStatus.OK).body(spotService.getSpotResponseByName(name));
+    @GetMapping("/get/{id}")
+    public ResponseEntity<SpotResponse> getSpotById(@PathVariable Long id){
+        return status(HttpStatus.OK).body(spotService.getSpotResponseById(id));
     }
 
     @GetMapping("/get/all")
@@ -43,7 +43,7 @@ public class SpotController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteSpotByName(@PathVariable Long id){
+    public ResponseEntity<String> deleteSpotById(@PathVariable Long id){
         spotService.deleteSpotByName(id);
         return status(HttpStatus.NO_CONTENT).body("Deleted spot");
     }

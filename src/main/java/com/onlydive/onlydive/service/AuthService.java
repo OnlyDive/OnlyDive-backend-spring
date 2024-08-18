@@ -161,7 +161,7 @@ public class AuthService { //todo add forgot password mechanism
                 .jwtToken(tokenService.generateJwtToken(authentication))
                 .refreshToken(tokenService.generateRefreshToken(user).getToken())
                 .user(loginRequest.username())
-                .expires(tokenService.getExpirationInDays().toInstant())
+                .expires(tokenService.getExpirationInDays())
                 .build();
     }
 
@@ -173,7 +173,7 @@ public class AuthService { //todo add forgot password mechanism
                 .jwtToken(tokenService.generateJwtToken(authentication))
                 .refreshToken(refreshRequest.refreshToken())
                 .user(refreshRequest.username())
-                .expires(tokenService.getExpirationInDays().toInstant())
+                .expires(tokenService.getExpirationInDays())
                 .build();
     }
 
