@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
 import java.util.Set;
 
 @Mapper(componentModel = "spring")
@@ -29,7 +30,7 @@ public abstract class SpotMapper {
 
 
     protected Long countComments(@NonNull Spot spot){
-        Set<SpotComment> comments = spot.getComments();
+        List<SpotComment> comments = spot.getComments();
         if (comments == null)
             return 0L;
         return (long) comments.size();

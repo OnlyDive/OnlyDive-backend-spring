@@ -31,15 +31,10 @@ public class SpotCommentController {
         return new ResponseEntity<>("spot's comment has been deleted",HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/get/{id}")
-    public ResponseEntity<SpotCommentResponse> getSingleSpotComment(@PathVariable Long id) {
-        return new ResponseEntity<>(spotCommentService.getSingleSpotComment(id),HttpStatus.OK);
-    }
-
     @GetMapping("/get/{spotId}/{pageNumber}")
     public ResponseEntity<List<SpotCommentResponse>> getSpotCommentsBySpotIdByPageNumber
             (@PathVariable Long spotId,@PathVariable Integer pageNumber) {
-        return new ResponseEntity<>(spotCommentService.getSpotCommentBySpotIdByAmount(spotId,pageNumber),
+        return new ResponseEntity<>(spotCommentService.getSpotCommentBySpotIdByPage(spotId,pageNumber),
                 HttpStatus.OK);
     }
 

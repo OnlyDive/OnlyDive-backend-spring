@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,8 +22,8 @@ public class Spot {
     private Double latitude;
     @Column(nullable = false)
     private Double longitude;
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-    private Set<SpotComment> comments;
+    @OneToMany(mappedBy = "spot",cascade = CascadeType.ALL)
+    private List<SpotComment> comments;
     @ManyToOne(cascade = CascadeType.ALL)
     private User creator;
     private Instant creationDate;

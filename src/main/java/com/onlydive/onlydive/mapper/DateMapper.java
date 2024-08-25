@@ -15,8 +15,5 @@ public class DateMapper {
                 .format(date);
     }
 
-    public Instant mapToInstant(String date){
-        return Instant.parse(date);
-    }
 }
 

@@ -24,14 +24,16 @@ public class SpotCommentService {
     private final AuthService authService;
     private final SpotService spotService;
     private final SpotCommentRepository spotCommentRepository;
+    private final Integer commentsPerReload = 5;
 
     public SpotCommentResponse createSpotComment(SpotCommentRequest request) {
         User user = authService.getCurrentUser();
-        Spot spot = spotService.getSpotById(request.SpotId());
+        Spot spot = spotService.getSpotById(request.spotId());
 
         SpotComment comment = spotCommentMapper.mapToSpotComment(request,spot,user);
 
         spotCommentRepository.save(comment);
+
 
         return spotCommentMapper.mapToSpotCommentResponse(comment);
     }
@@ -43,18 +45,10 @@ public class SpotCommentService {
         spotCommentRepository.deleteById(id);
     }
 
-    public SpotCommentResponse getSingleSpotComment(Long id) {
-        return spotCommentMapper.mapToSpotCommentResponse(
-                spotCommentRepository.findById(id).orElseThrow(
-                        () -> new SpringOnlyDiveException("Comment with id " + id + " not found")
-                )
-        );
-    }
-
-    public List<SpotCommentResponse> getSpotCommentBySpotIdByAmount(Long spotId, Integer amount) {
+    public List<SpotCommentResponse> getSpotCommentBySpotIdByPage(Long spotId, Integer page) {
         Spot spot = spotService.getSpotById(spotId);
 
-        Pageable pageable = PageRequest.of(0,amount);
+        Pageable pageable = PageRequest.of((page - 1)*commentsPerReload,page*commentsPerReload);
 
         return spotCommentRepository.findAllBySpot(spot,pageable).stream()
                 .map(spotCommentMapper::mapToSpotCommentResponse)

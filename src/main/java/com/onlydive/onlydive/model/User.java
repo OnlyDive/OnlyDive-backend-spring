@@ -19,7 +19,7 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
     @Column(nullable = false)
     private String firstName;
     @Column(nullable = false)
@@ -35,6 +35,8 @@ public class User implements UserDetails {
     private String password;
     private Instant created;
     private boolean active;
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<SpotComment> comments;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
