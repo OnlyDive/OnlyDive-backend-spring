@@ -1,6 +1,5 @@
 package com.onlydive.onlydive.controller;
 
-import com.onlydive.onlydive.dto.MapCoordinatesRequest;
 import com.onlydive.onlydive.dto.SpotRequest;
 import com.onlydive.onlydive.dto.SpotResponse;
 import com.onlydive.onlydive.service.SpotService;
@@ -37,10 +36,6 @@ public class SpotController {
         return status(HttpStatus.OK).body(spotService.getAllSpots());
     }
 
-    @GetMapping("/get/byCoordinates")
-    public ResponseEntity<List<SpotResponse>> getSpotsInAreaByCoordinates(@RequestBody MapCoordinatesRequest coordinatesRequest){
-        return status(HttpStatus.OK).body(spotService.getSpotsResponsesInAreaByCoordinates(coordinatesRequest));
-    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteSpotById(@PathVariable Long id){

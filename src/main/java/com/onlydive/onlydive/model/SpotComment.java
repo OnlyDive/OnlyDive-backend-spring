@@ -17,9 +17,9 @@ public class SpotComment {
     private Long id;
     private String name;
     private String description;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Spot spot;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private User user;
     private Instant creationDate;
 }

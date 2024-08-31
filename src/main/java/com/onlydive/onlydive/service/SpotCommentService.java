@@ -48,7 +48,7 @@ public class SpotCommentService {
     public List<SpotCommentResponse> getSpotCommentBySpotIdByPage(Long spotId, Integer page) {
         Spot spot = spotService.getSpotById(spotId);
 
-        Pageable pageable = PageRequest.of((page - 1)*commentsPerReload,page*commentsPerReload);
+        Pageable pageable = PageRequest.of(page,commentsPerReload);
 
         return spotCommentRepository.findAllBySpot(spot,pageable).stream()
                 .map(spotCommentMapper::mapToSpotCommentResponse)

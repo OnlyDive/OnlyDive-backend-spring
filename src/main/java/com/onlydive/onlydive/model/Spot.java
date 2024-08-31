@@ -22,9 +22,9 @@ public class Spot {
     private Double latitude;
     @Column(nullable = false)
     private Double longitude;
-    @OneToMany(mappedBy = "spot",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "spot",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SpotComment> comments;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private User creator;
     private Instant creationDate;
     //todo pogoda

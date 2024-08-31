@@ -1,6 +1,5 @@
 package com.onlydive.onlydive.service;
 
-import com.onlydive.onlydive.dto.MapCoordinatesRequest;
 import com.onlydive.onlydive.dto.SpotRequest;
 import com.onlydive.onlydive.dto.SpotResponse;
 import com.onlydive.onlydive.exceptions.SpringOnlyDiveException;
@@ -51,17 +50,6 @@ public class SpotService {
                 .toList();
     }
 
-    public List<SpotResponse> getSpotsResponsesInAreaByCoordinates(MapCoordinatesRequest coordinatesRequest) {
-        Double minLatitude = coordinatesRequest.minLatitude();
-        Double maxLatitude = coordinatesRequest.maxLatitude();
-        Double minLongitude = coordinatesRequest.minLongitude();
-        Double maxLongitude = coordinatesRequest.maxLongitude();
-
-        return spotRepository.findAllByLatitudeBetweenAndLongitudeBetween(minLatitude,maxLatitude, minLongitude,maxLongitude)
-                .stream()
-                .map(spotMapper::mapToResponse)
-                .toList();
-    }
 
     public void deleteSpotByName(Long id) {
         spotRepository.findById(id).orElseThrow(

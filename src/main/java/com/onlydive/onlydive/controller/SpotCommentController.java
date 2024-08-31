@@ -3,6 +3,7 @@ package com.onlydive.onlydive.controller;
 import com.onlydive.onlydive.dto.SpotCommentRequest;
 import com.onlydive.onlydive.dto.SpotCommentResponse;
 import com.onlydive.onlydive.service.SpotCommentService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/spotComment")
 @Slf4j
+@Transactional
 public class SpotCommentController {
 
     private final SpotCommentService spotCommentService;

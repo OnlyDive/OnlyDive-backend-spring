@@ -35,7 +35,7 @@ public class User implements UserDetails {
     private String password;
     private Instant created;
     private boolean active;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private List<SpotComment> comments;
 
     @Override
