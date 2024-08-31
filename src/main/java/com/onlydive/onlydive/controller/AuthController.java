@@ -1,9 +1,6 @@
 package com.onlydive.onlydive.controller;
 
-import com.onlydive.onlydive.dto.LoginRequest;
-import com.onlydive.onlydive.dto.AuthResponse;
-import com.onlydive.onlydive.dto.RefreshTokenRequest;
-import com.onlydive.onlydive.dto.SignUpRequest;
+import com.onlydive.onlydive.dto.*;
 import com.onlydive.onlydive.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -50,5 +47,10 @@ public class AuthController {
     public ResponseEntity<String> logout(@Validated @RequestBody RefreshTokenRequest refreshTokenRequest) {
         authService.deleteRefreshToken(refreshTokenRequest);
         return new ResponseEntity<>("Succesfully Logout", HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/getCurrentUserPermissions")
+    public ResponseEntity<PermissionResponse> getCurrentUserPermissions() {
+        return new ResponseEntity<>(authService.getCurrentUserPermissions(),HttpStatus.OK);
     }
 }
