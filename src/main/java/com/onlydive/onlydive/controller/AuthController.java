@@ -49,8 +49,8 @@ public class AuthController {
         return new ResponseEntity<>("Succesfully Logout", HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/getCurrentUserPermissions")
-    public ResponseEntity<PermissionResponse> getCurrentUserPermissions() {
-        return new ResponseEntity<>(authService.getCurrentUserPermissions(),HttpStatus.OK);
+    @PostMapping("/getCurrentUserPermissions")
+    public ResponseEntity<Boolean> isUserPermitted(@Validated @RequestBody PermissionRequest permissionRequest) {
+        return new ResponseEntity<>(authService.isUserPermitted(permissionRequest),HttpStatus.OK);
     }
 }

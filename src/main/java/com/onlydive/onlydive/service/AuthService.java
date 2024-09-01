@@ -181,7 +181,8 @@ public class AuthService { //todo add forgot password mechanism
         );
     }
 
-    public PermissionResponse getCurrentUserPermissions() {
-        return new PermissionResponse(getCurrentUser().getUsername());
+    public Boolean isUserPermitted(PermissionRequest permissionRequest) {
+        String username =  getCurrentUser().getUsername();
+        return permissionRequest.username().equals(username);
     }
 }
