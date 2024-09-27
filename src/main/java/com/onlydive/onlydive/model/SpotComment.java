@@ -16,7 +16,11 @@ public class SpotComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
+
     @ManyToOne
     private Spot spot;
     @ManyToOne
