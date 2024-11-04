@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Object> handleAuthenticationException(AuthenticationException e) {
-        return status(HttpStatus.FORBIDDEN)
+        return status(HttpStatus.UNAUTHORIZED)
                 .body(getErrorsMap(e.getMessage()));
     }
 

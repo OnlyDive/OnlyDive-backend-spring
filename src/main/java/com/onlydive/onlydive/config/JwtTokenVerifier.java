@@ -5,6 +5,7 @@ import com.google.common.net.HttpHeaders;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -52,9 +53,16 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 
         String token = authorization.replace("Bearer " , "");
 
-        Jws<Claims> claimsJws = Jwts.parser()
-                .verifyWith(secretKey).build()
-                .parseSignedClaims(token);
+        Jws<Claims> claimsJws;
+        try {
+            claimsJws = Jwts.parser()
+                    .verifyWith(secretKey).build()
+                    .parseSignedClaims(token);
+        } catch (MalformedJwtException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            filterChain.doFilter(request, response);
+            return;
+        }
 
         Date expire = claimsJws.getPayload().getExpiration();
         Date now = new Date();
@@ -76,7 +84,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                 username, null, authority
         );
 
-            SecurityContextHolder.getContext().setAuthentication(auth);
+        SecurityContextHolder.getContext().setAuthentication(auth);
 
         response.setStatus(HttpServletResponse.SC_OK);
         filterChain.doFilter(request, response);

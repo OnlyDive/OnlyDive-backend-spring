@@ -160,7 +160,7 @@ public class AuthService { //todo add forgot password mechanism
 
     public AuthResponse refreshToken(RefreshTokenRequest refreshRequest) {
         tokenService.validateRefreshToken(refreshRequest.refreshToken(), refreshRequest.username());
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = new UsernamePasswordAuthenticationToken(refreshRequest.username(), null);
 
         return AuthResponse.builder()
                 .jwtToken(tokenService.generateJwtToken(authentication))
