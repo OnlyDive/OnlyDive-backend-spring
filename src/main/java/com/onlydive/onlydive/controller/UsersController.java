@@ -26,7 +26,7 @@ public class UsersController {
         return status(HttpStatus.OK).body(usersService.getAllUsers());
     }
 
-    @GetMapping("/{uid}")
+    @GetMapping("/by-id/{uid}")
     public ResponseEntity<UserResponse> getUser(@PathVariable Long uid) {
         return status(HttpStatus.OK).body(usersService.getUserById(uid));
     }
