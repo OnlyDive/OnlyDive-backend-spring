@@ -31,6 +31,11 @@ public class UsersController {
         return status(HttpStatus.OK).body(usersService.getUserById(uid));
     }
 
+    @GetMapping("/{username}")
+    public ResponseEntity<UserResponse> getUser(@PathVariable String username) {
+        return status(HttpStatus.OK).body(usersService.getUserByUsername(username));
+    }
+
     @GetMapping("/licences")
     public ResponseEntity<List<LicenceEnum>> getAllLicences() {
         return status(HttpStatus.OK).body(licencesService.getAllLicences());
