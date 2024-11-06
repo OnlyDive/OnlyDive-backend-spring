@@ -71,13 +71,13 @@ public class AuthService { //todo add forgot password mechanism
         return true;
     }
 
-    public void signUp(SignUpRequest signUpRequest) {
+    public void signUp(SignUpDto signUpDto) {
         User user = new User();
-        user.setUsername(signUpRequest.getUsername());
-        user.setFirstName(signUpRequest.getFirstName());
-        user.setLastName(signUpRequest.getLastName());
-        user.setEmail(signUpRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        user.setUsername(signUpDto.getUsername());
+        user.setFirstName(signUpDto.getFirstName());
+        user.setLastName(signUpDto.getLastName());
+        user.setEmail(signUpDto.getEmail());
+        user.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
         user.setCreated(Instant.now());
         user.setActive(false);
 
@@ -136,9 +136,9 @@ public class AuthService { //todo add forgot password mechanism
     }
 
 
-    public AuthResponse login(LoginRequest loginRequest) {
-        Authentication authentication = new UsernamePasswordAuthenticationToken(loginRequest.username(),
-                loginRequest.password());
+    public AuthDto login(LoginDto loginDto) {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(loginDto.getUsername(),
+                loginDto.getPassword());
 
         authentication = authenticationManager.authenticate(authentication);
 
@@ -150,28 +150,28 @@ public class AuthService { //todo add forgot password mechanism
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return  AuthResponse.builder()
+        return  AuthDto.builder()
                 .jwtToken(tokenService.generateJwtToken(authentication))
                 .refreshToken(tokenService.generateRefreshToken(user).getToken())
-                .user(loginRequest.username())
+                .user(loginDto.getUsername())
                 .expires(tokenService.getExpirationInDays())
                 .build();
     }
 
-    public AuthResponse refreshToken(RefreshTokenRequest refreshRequest) {
-        tokenService.validateRefreshToken(refreshRequest.refreshToken(), refreshRequest.username());
-        Authentication authentication = new UsernamePasswordAuthenticationToken(refreshRequest.username(), null);
+    public AuthDto refreshToken(RefreshTokenDto refreshRequest) {
+        tokenService.validateRefreshToken(refreshRequest.getRefreshToken(), refreshRequest.getUsername());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(refreshRequest.getUsername(), null);
 
-        return AuthResponse.builder()
+        return AuthDto.builder()
                 .jwtToken(tokenService.generateJwtToken(authentication))
-                .refreshToken(refreshRequest.refreshToken())
-                .user(refreshRequest.username())
+                .refreshToken(refreshRequest.getRefreshToken())
+                .user(refreshRequest.getUsername())
                 .expires(tokenService.getExpirationInDays())
                 .build();
     }
 
-    public void deleteRefreshToken(RefreshTokenRequest refreshTokenRequest) {
-        tokenService.deleteRefreshToken(refreshTokenRequest.refreshToken(), refreshTokenRequest.username());
+    public void deleteRefreshToken(RefreshTokenDto refreshTokenDto) {
+        tokenService.deleteRefreshToken(refreshTokenDto.getRefreshToken(), refreshTokenDto.getUsername());
     }
 
     public User getCurrentUser(){
@@ -181,8 +181,8 @@ public class AuthService { //todo add forgot password mechanism
         );
     }
 
-    public Boolean isUserPermitted(PermissionRequest permissionRequest) {
+    public Boolean isUserPermitted(PermissionDto permissionRequest) {
         String username =  getCurrentUser().getUsername();
-        return permissionRequest.username().equals(username);
+        return permissionRequest.getUsername().equals(username);
     }
 }

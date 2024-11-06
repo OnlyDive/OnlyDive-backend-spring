@@ -1,9 +1,7 @@
 package com.onlydive.onlydive.controller;
 
-import com.onlydive.onlydive.dto.SpotCommentRequest;
-import com.onlydive.onlydive.dto.SpotCommentResponse;
+import com.onlydive.onlydive.dto.SpotCommentDto;
 import com.onlydive.onlydive.service.SpotCommentService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,13 +14,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/spotComment")
 @Slf4j
-@Transactional
 public class SpotCommentController {
 
     private final SpotCommentService spotCommentService;
 
     @PostMapping("/create")
-    public ResponseEntity<SpotCommentResponse> createSpotComment(@RequestBody SpotCommentRequest request) {
+    public ResponseEntity<SpotCommentDto> createSpotComment(@RequestBody SpotCommentDto request) {
         return new ResponseEntity<>(spotCommentService.createSpotComment(request), HttpStatus.CREATED);
     }
 
@@ -33,8 +30,9 @@ public class SpotCommentController {
         return new ResponseEntity<>("spot's comment has been deleted",HttpStatus.NO_CONTENT);
     }
 
+
     @GetMapping("/get/{spotId}/{pageNumber}")
-    public ResponseEntity<List<SpotCommentResponse>> getSpotCommentsBySpotIdByPageNumber
+    public ResponseEntity<List<SpotCommentDto>> getSpotCommentsBySpotIdByPageNumber
             (@PathVariable Long spotId,@PathVariable Integer pageNumber) {
         return new ResponseEntity<>(spotCommentService.getSpotCommentBySpotIdByPage(spotId,pageNumber),
                 HttpStatus.OK);

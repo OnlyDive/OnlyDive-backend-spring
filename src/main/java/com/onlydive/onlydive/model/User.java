@@ -20,21 +20,31 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private String firstName;
+
     @Column(nullable = false)
     private String lastName;
+
     private LicenceEnum licence;
+
     @Lob
     private String bio;
+
     @Column(unique = true, nullable = false)
     @Email
     private String email;
+
     @Column(unique = true, nullable = false)
     private String username;
+
     private String password;
+
     private Instant created;
+
     private boolean active;
+
     @OneToMany(mappedBy = "user")
     private List<SpotComment> comments;
 

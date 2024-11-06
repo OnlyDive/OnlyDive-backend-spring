@@ -1,7 +1,6 @@
 package com.onlydive.onlydive.controller;
 
-import com.onlydive.onlydive.dto.SpotRequest;
-import com.onlydive.onlydive.dto.SpotResponse;
+import com.onlydive.onlydive.dto.SpotDto;
 import com.onlydive.onlydive.service.SpotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,17 +21,17 @@ public class SpotController {
     private final SpotService spotService;
 
     @PostMapping("/create")
-    public ResponseEntity<SpotResponse> createSpot(@RequestBody SpotRequest spotDto){
+    public ResponseEntity<SpotDto> createSpot(@RequestBody SpotDto spotDto){
         return status(HttpStatus.CREATED).body(spotService.createSpot(spotDto));
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<SpotResponse> getSpotById(@PathVariable Long id){
-        return status(HttpStatus.OK).body(spotService.getSpotResponseById(id));
+    public ResponseEntity<SpotDto> getSpotById(@PathVariable Long id){
+        return status(HttpStatus.OK).body(spotService.getSpotDtoById(id));
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity<List<SpotResponse>> getAllSpots(){
+    public ResponseEntity<List<SpotDto>> getAllSpots(){
         return status(HttpStatus.OK).body(spotService.getAllSpots());
     }
 

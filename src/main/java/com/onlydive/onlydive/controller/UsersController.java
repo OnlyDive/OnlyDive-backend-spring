@@ -1,6 +1,6 @@
 package com.onlydive.onlydive.controller;
 
-import com.onlydive.onlydive.dto.UserResponse;
+import com.onlydive.onlydive.dto.UserDto;
 import com.onlydive.onlydive.model.LicenceEnum;
 import com.onlydive.onlydive.service.LicencesService;
 import com.onlydive.onlydive.service.UsersService;
@@ -22,17 +22,17 @@ public class UsersController {
     private final LicencesService licencesService;
 
     @GetMapping()
-    public ResponseEntity<List<UserResponse>> getUsers() {
+    public ResponseEntity<List<UserDto>> getUsers() {
         return status(HttpStatus.OK).body(usersService.getAllUsers());
     }
 
-    @GetMapping("/by-id/{uid}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable Long uid) {
-        return status(HttpStatus.OK).body(usersService.getUserById(uid));
+    @GetMapping("/by-id/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        return status(HttpStatus.OK).body(usersService.getUserById(id));
     }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable String username) {
+    @GetMapping("/by-username/{username}")
+    public ResponseEntity<UserDto> getUserByName(@PathVariable String username) {
         return status(HttpStatus.OK).body(usersService.getUserByUsername(username));
     }
 

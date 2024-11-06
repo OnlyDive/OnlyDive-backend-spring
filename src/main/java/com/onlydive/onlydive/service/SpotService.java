@@ -1,7 +1,6 @@
 package com.onlydive.onlydive.service;
 
-import com.onlydive.onlydive.dto.SpotRequest;
-import com.onlydive.onlydive.dto.SpotResponse;
+import com.onlydive.onlydive.dto.SpotDto;
 import com.onlydive.onlydive.exceptions.SpringOnlyDiveException;
 import com.onlydive.onlydive.mapper.SpotMapper;
 import com.onlydive.onlydive.model.Spot;
@@ -21,7 +20,7 @@ public class SpotService {
     private final SpotMapper spotMapper;
     private final AuthService authService;
 
-    public SpotResponse createSpot(SpotRequest spotDto) {
+    public SpotDto createSpot(SpotDto spotDto) {
         User user =  authService.getCurrentUser();
         Spot spot = spotMapper.mapToSpot(spotDto,user);
 
@@ -30,20 +29,19 @@ public class SpotService {
         return spotMapper.mapToResponse(spot);
     }
 
-    public SpotResponse getSpotResponseById(Long id) {
-        Spot spot = spotRepository.findById(id).orElseThrow(
-                () -> new SpringOnlyDiveException("Spot with id " + id + " not found")
-        );
-        return spotMapper.mapToResponse(spot);
+
+    public SpotDto getSpotDtoById(Long id) {
+        return spotMapper.mapToResponse(getSpotById(id));
     }
 
     public Spot getSpotById(Long id) {
+
         return spotRepository.findById(id).orElseThrow(
                 () -> new SpringOnlyDiveException("Spot with id " + id + " not found")
         );
     }
 
-    public List<SpotResponse> getAllSpots() {
+    public List<SpotDto> getAllSpots() {
         return spotRepository.findAll()
                 .stream()
                 .map(spotMapper::mapToResponse)
@@ -55,6 +53,7 @@ public class SpotService {
         spotRepository.findById(id).orElseThrow(
                 () -> new SpringOnlyDiveException("Spot with id " + id + " not found")
         );
+
         spotRepository.deleteById(id);
     }
 }

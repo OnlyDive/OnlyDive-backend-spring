@@ -9,8 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface SpotRepository extends JpaRepository<Spot, Long> {
-    Optional<Spot> findByName(String name);
-
-    List<Spot> findAllByLatitudeBetweenAndLongitudeBetween(Double minLatitude, Double maxLatitude,
-                                                           Double minLongitude, Double maxLongitude);
 }

@@ -14,6 +14,5 @@ public class DateMapper {
                 .withZone(ZoneId.systemDefault())
                 .format(date);
     }
-
 }
 

@@ -16,15 +16,22 @@ public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long groupId;
+
     @Column(nullable = false)
     private String name;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, updatable = false)
     private User owner;
+
     private Integer membersLimit;
+
     private Float averageMemberLicence;
+
     @ManyToMany(fetch = FetchType.LAZY)
     private List<User> members;
+
     private Instant lastActivity;
+
     private Instant eventDate;
 }

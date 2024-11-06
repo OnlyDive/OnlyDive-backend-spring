@@ -21,8 +21,8 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/signUp")
-    public ResponseEntity<String> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
-        authService.signUp(signUpRequest);
+    public ResponseEntity<String> signUp(@Valid @RequestBody SignUpDto signUpDto) {
+        authService.signUp(signUpDto);
         return new ResponseEntity<>("User Registration Successful", HttpStatus.OK);
     }
 
@@ -33,24 +33,24 @@ public class AuthController {
                     .body("Account Activated Successfully");
     }
 
-    @PostMapping("/logIn")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
-        return new  ResponseEntity<>(authService.login(loginRequest),HttpStatus.OK);
+    @PostMapping("/login")
+    public ResponseEntity<AuthDto> login(@RequestBody LoginDto loginDto) {
+        return new  ResponseEntity<>(authService.login(loginDto),HttpStatus.OK);
     }
 
-    @PostMapping("/refreshToken")
-    public ResponseEntity<AuthResponse> refreshTokens(@Validated @RequestBody RefreshTokenRequest refreshTokenRequest) {
-        return new ResponseEntity<>(authService.refreshToken(refreshTokenRequest),HttpStatus.OK);
+    @PostMapping("/refresh/token")
+    public ResponseEntity<AuthDto> refreshTokens(@Validated @RequestBody RefreshTokenDto refreshTokenDto) {
+        return new ResponseEntity<>(authService.refreshToken(refreshTokenDto),HttpStatus.OK);
     }
 
-    @PostMapping("/logOut")
-    public ResponseEntity<String> logout(@Validated @RequestBody RefreshTokenRequest refreshTokenRequest) {
-        authService.deleteRefreshToken(refreshTokenRequest);
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@Validated @RequestBody RefreshTokenDto refreshTokenDto) {
+        authService.deleteRefreshToken(refreshTokenDto);
         return new ResponseEntity<>("Succesfully Logout", HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/getCurrentUserPermissions")
-    public ResponseEntity<Boolean> isUserPermitted(@Validated @RequestBody PermissionRequest permissionRequest) {
-        return new ResponseEntity<>(authService.isUserPermitted(permissionRequest),HttpStatus.OK);
+    public ResponseEntity<Boolean> isUserPermitted(@Validated @RequestBody PermissionDto permissionDto) {
+        return new ResponseEntity<>(authService.isUserPermitted(permissionDto),HttpStatus.OK);
     }
 }

@@ -1,7 +1,6 @@
 package com.onlydive.onlydive.service;
 
-import com.onlydive.onlydive.dto.SpotCommentRequest;
-import com.onlydive.onlydive.dto.SpotCommentResponse;
+import com.onlydive.onlydive.dto.SpotCommentDto;
 import com.onlydive.onlydive.exceptions.SpringOnlyDiveException;
 import com.onlydive.onlydive.mapper.SpotCommentMapper;
 import com.onlydive.onlydive.model.Spot;
@@ -24,11 +23,10 @@ public class SpotCommentService {
     private final AuthService authService;
     private final SpotService spotService;
     private final SpotCommentRepository spotCommentRepository;
-    private final Integer commentsPerReload = 5;
 
-    public SpotCommentResponse createSpotComment(SpotCommentRequest request) {
+    public SpotCommentDto createSpotComment(SpotCommentDto request) {
         User user = authService.getCurrentUser();
-        Spot spot = spotService.getSpotById(request.spotId());
+        Spot spot = spotService.getSpotById(request.getSpotId());
 
         SpotComment comment = spotCommentMapper.mapToSpotComment(request,spot,user);
 
@@ -45,10 +43,10 @@ public class SpotCommentService {
         spotCommentRepository.deleteById(id);
     }
 
-    public List<SpotCommentResponse> getSpotCommentBySpotIdByPage(Long spotId, Integer page) {
+    public List<SpotCommentDto> getSpotCommentBySpotIdByPage(Long spotId, Integer page) {
         Spot spot = spotService.getSpotById(spotId);
 
-        Pageable pageable = PageRequest.of(page,commentsPerReload);
+        Pageable pageable = PageRequest.of(0,page);
 
         return spotCommentRepository.findAllBySpot(spot,pageable).stream()
                 .map(spotCommentMapper::mapToSpotCommentResponse)
