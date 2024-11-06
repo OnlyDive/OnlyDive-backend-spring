@@ -1,9 +1,9 @@
 package com.onlydive.onlydive.controller;
 
-import com.onlydive.onlydive.dto.LoginRequest;
-import com.onlydive.onlydive.dto.AuthResponse;
-import com.onlydive.onlydive.dto.RefreshTokenRequest;
-import com.onlydive.onlydive.dto.SignUpRequest;
+import com.onlydive.onlydive.dto.LoginDto;
+import com.onlydive.onlydive.dto.AuthDto;
+import com.onlydive.onlydive.dto.RefreshTokenDto;
+import com.onlydive.onlydive.dto.SignUpDto;
 import com.onlydive.onlydive.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -24,8 +24,8 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/signUp")
-    public ResponseEntity<String> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
-        authService.signUp(signUpRequest);
+    public ResponseEntity<String> signUp(@Valid @RequestBody SignUpDto signUpDto) {
+        authService.signUp(signUpDto);
         return new ResponseEntity<>("User Registration Successful", HttpStatus.OK);
     }
 
@@ -37,18 +37,18 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
-        return new  ResponseEntity<>(authService.login(loginRequest),HttpStatus.OK);
+    public ResponseEntity<AuthDto> login(@RequestBody LoginDto loginDto) {
+        return new  ResponseEntity<>(authService.login(loginDto),HttpStatus.OK);
     }
 
     @PostMapping("/refresh/token")
-    public ResponseEntity<AuthResponse> refreshTokens(@Validated @RequestBody RefreshTokenRequest refreshTokenRequest) {
-        return new ResponseEntity<>(authService.refreshToken(refreshTokenRequest),HttpStatus.OK);
+    public ResponseEntity<AuthDto> refreshTokens(@Validated @RequestBody RefreshTokenDto refreshTokenDto) {
+        return new ResponseEntity<>(authService.refreshToken(refreshTokenDto),HttpStatus.OK);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@Validated @RequestBody RefreshTokenRequest refreshTokenRequest) {
-        authService.deleteRefreshToken(refreshTokenRequest);
+    public ResponseEntity<String> logout(@Validated @RequestBody RefreshTokenDto refreshTokenDto) {
+        authService.deleteRefreshToken(refreshTokenDto);
         return new ResponseEntity<>("Succesfully Logout", HttpStatus.ACCEPTED);
     }
 }

@@ -1,6 +1,6 @@
 package com.onlydive.onlydive.controller;
 
-import com.onlydive.onlydive.dto.UserResponse;
+import com.onlydive.onlydive.dto.UserDto;
 import com.onlydive.onlydive.model.LicenceEnum;
 import com.onlydive.onlydive.service.LicencesService;
 import com.onlydive.onlydive.service.UsersService;
@@ -22,12 +22,12 @@ public class UsersController {
     private final LicencesService licencesService;
 
     @GetMapping()
-    public ResponseEntity<List<UserResponse>> getUsers() {
+    public ResponseEntity<List<UserDto>> getUsers() {
         return status(HttpStatus.OK).body(usersService.getAllUsers());
     }
 
     @GetMapping("/{uid}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable Long uid) {
+    public ResponseEntity<UserDto> getUser(@PathVariable Long uid) {
         return status(HttpStatus.OK).body(usersService.getUserById(uid));
     }
 

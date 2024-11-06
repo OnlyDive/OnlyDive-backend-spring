@@ -1,7 +1,6 @@
 package com.onlydive.onlydive.controller;
 
-import com.onlydive.onlydive.dto.SpotCommentRequest;
-import com.onlydive.onlydive.dto.SpotCommentResponse;
+import com.onlydive.onlydive.dto.SpotCommentDto;
 import com.onlydive.onlydive.service.SpotCommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,7 @@ public class SpotCommentController {
     private final SpotCommentService spotCommentService;
 
     @PostMapping("/create")
-    public ResponseEntity<SpotCommentResponse> createSpotComment(@RequestBody SpotCommentRequest request) {
+    public ResponseEntity<SpotCommentDto> createSpotComment(@RequestBody SpotCommentDto request) {
         return new ResponseEntity<>(spotCommentService.createSpotComment(request), HttpStatus.CREATED);
     }
 
@@ -32,12 +31,12 @@ public class SpotCommentController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<SpotCommentResponse> getSingleSpotComment(@PathVariable Long id) {
+    public ResponseEntity<SpotCommentDto> getSingleSpotComment(@PathVariable Long id) {
         return new ResponseEntity<>(spotCommentService.getSingleSpotComment(id),HttpStatus.OK);
     }
 
     @GetMapping("/get/{spotId}/{pageNumber}")
-    public ResponseEntity<List<SpotCommentResponse>> getSpotCommentsBySpotIdByPageNumber
+    public ResponseEntity<List<SpotCommentDto>> getSpotCommentsBySpotIdByPageNumber
             (@PathVariable Long spotId,@PathVariable Integer pageNumber) {
         return new ResponseEntity<>(spotCommentService.getSpotCommentBySpotIdByAmount(spotId,pageNumber),
                 HttpStatus.OK);

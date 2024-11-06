@@ -1,8 +1,6 @@
 package com.onlydive.onlydive.service;
 
-import com.onlydive.onlydive.dto.MapCoordinatesRequest;
-import com.onlydive.onlydive.dto.SpotRequest;
-import com.onlydive.onlydive.dto.SpotResponse;
+import com.onlydive.onlydive.dto.SpotDto;
 import com.onlydive.onlydive.exceptions.SpringOnlyDiveException;
 import com.onlydive.onlydive.mapper.SpotMapper;
 import com.onlydive.onlydive.model.Spot;
@@ -22,7 +20,7 @@ public class SpotService {
     private final SpotMapper spotMapper;
     private final AuthService authService;
 
-    public SpotResponse createSpot(SpotRequest spotDto) {
+    public SpotDto createSpot(SpotDto spotDto) {
         User user =  authService.getCurrentUser();
         Spot spot = spotMapper.mapToSpot(spotDto,user);
 
@@ -31,7 +29,7 @@ public class SpotService {
         return spotMapper.mapToResponse(spot);
     }
 
-    public SpotResponse getSpotResponseByName(String name) {
+    public SpotDto getSpotByName(String name) {
         Spot spot = spotRepository.findByName(name).orElseThrow(
                 () -> new SpringOnlyDiveException("Spot with name " + name + " not found")
         );
@@ -44,29 +42,19 @@ public class SpotService {
         );
     }
 
-    public List<SpotResponse> getAllSpots() {
+    public List<SpotDto> getAllSpots() {
         return spotRepository.findAll()
                 .stream()
                 .map(spotMapper::mapToResponse)
                 .toList();
     }
 
-    public List<SpotResponse> getSpotsResponsesInAreaByCoordinates(MapCoordinatesRequest coordinatesRequest) {
-        Double minLatitude = coordinatesRequest.minLatitude();
-        Double maxLatitude = coordinatesRequest.maxLatitude();
-        Double minLongitude = coordinatesRequest.minLongitude();
-        Double maxLongitude = coordinatesRequest.maxLongitude();
-
-        return spotRepository.findAllByLatitudeBetweenAndLongitudeBetween(minLatitude,maxLatitude, minLongitude,maxLongitude)
-                .stream()
-                .map(spotMapper::mapToResponse)
-                .toList();
-    }
 
     public void deleteSpotByName(Long id) {
-        spotRepository.findById(id).orElseThrow(
+        Spot spot = spotRepository.findById(id).orElseThrow(
                 () -> new SpringOnlyDiveException("Spot with id " + id + " not found")
         );
+
         spotRepository.deleteById(id);
     }
 }

@@ -13,8 +13,11 @@ public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String token;
+
     private Instant createdDate;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 }

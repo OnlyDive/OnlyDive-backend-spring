@@ -35,8 +35,6 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
      * @param request : HttpServletRequest
      * @param response : HttpServletResponse
      * @param filterChain : FilterChain
-     * @throws ServletException
-     * @throws IOException
      */
     @SuppressWarnings("unchecked")
     @Override

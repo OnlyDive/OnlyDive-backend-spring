@@ -1,7 +1,6 @@
 package com.onlydive.onlydive.service;
 
-import com.onlydive.onlydive.dto.SpotCommentRequest;
-import com.onlydive.onlydive.dto.SpotCommentResponse;
+import com.onlydive.onlydive.dto.SpotCommentDto;
 import com.onlydive.onlydive.exceptions.SpringOnlyDiveException;
 import com.onlydive.onlydive.mapper.SpotCommentMapper;
 import com.onlydive.onlydive.model.Spot;
@@ -25,9 +24,9 @@ public class SpotCommentService {
     private final SpotService spotService;
     private final SpotCommentRepository spotCommentRepository;
 
-    public SpotCommentResponse createSpotComment(SpotCommentRequest request) {
+    public SpotCommentDto createSpotComment(SpotCommentDto request) {
         User user = authService.getCurrentUser();
-        Spot spot = spotService.getSpotById(request.SpotId());
+        Spot spot = spotService.getSpotById(request.getSpotId());
 
         SpotComment comment = spotCommentMapper.mapToSpotComment(request,spot,user);
 
@@ -43,7 +42,7 @@ public class SpotCommentService {
         spotCommentRepository.deleteById(id);
     }
 
-    public SpotCommentResponse getSingleSpotComment(Long id) {
+    public SpotCommentDto getSingleSpotComment(Long id) {
         return spotCommentMapper.mapToSpotCommentResponse(
                 spotCommentRepository.findById(id).orElseThrow(
                         () -> new SpringOnlyDiveException("Comment with id " + id + " not found")
@@ -51,7 +50,7 @@ public class SpotCommentService {
         );
     }
 
-    public List<SpotCommentResponse> getSpotCommentBySpotIdByAmount(Long spotId, Integer amount) {
+    public List<SpotCommentDto> getSpotCommentBySpotIdByAmount(Long spotId, Integer amount) {
         Spot spot = spotService.getSpotById(spotId);
 
         Pageable pageable = PageRequest.of(0,amount);

@@ -1,9 +1,9 @@
 package com.onlydive.onlydive.service;
 
-import com.onlydive.onlydive.dto.LoginRequest;
-import com.onlydive.onlydive.dto.AuthResponse;
-import com.onlydive.onlydive.dto.RefreshTokenRequest;
-import com.onlydive.onlydive.dto.SignUpRequest;
+import com.onlydive.onlydive.dto.LoginDto;
+import com.onlydive.onlydive.dto.AuthDto;
+import com.onlydive.onlydive.dto.RefreshTokenDto;
+import com.onlydive.onlydive.dto.SignUpDto;
 import com.onlydive.onlydive.exceptions.SpringOnlyDiveException;
 import com.onlydive.onlydive.exceptions.SpringOnlyDiveWebStatusException;
 import com.onlydive.onlydive.model.NotificationEmail;
@@ -16,13 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authorization.AuthorizationDeniedException;
-import org.springframework.security.authorization.AuthorizationResult;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -58,13 +54,13 @@ public class AuthService {
 
 
 
-    public void signUp(SignUpRequest signUpRequest) {
+    public void signUp(SignUpDto signUpDto) {
         User user = new User();
-        user.setUsername(signUpRequest.getUsername());
-        user.setFirstName(signUpRequest.getFirstName());
-        user.setLastName(signUpRequest.getLastName());
-        user.setEmail(signUpRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        user.setUsername(signUpDto.getUsername());
+        user.setFirstName(signUpDto.getFirstName());
+        user.setLastName(signUpDto.getLastName());
+        user.setEmail(signUpDto.getEmail());
+        user.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
         user.setCreated(Instant.now());
         user.setActive(false);
 
@@ -121,9 +117,9 @@ public class AuthService {
     }
 
 
-    public AuthResponse login(LoginRequest loginRequest) {
-        Authentication authentication = new UsernamePasswordAuthenticationToken(loginRequest.username(),
-                loginRequest.password());
+    public AuthDto login(LoginDto loginDto) {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(loginDto.getUsername(),
+                loginDto.getPassword());
 
         authentication = authenticationManager.authenticate(authentication);
 
@@ -135,28 +131,28 @@ public class AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return  AuthResponse.builder()
+        return  AuthDto.builder()
                 .jwtToken(tokenService.generateJwtToken(authentication))
                 .refreshToken(tokenService.generateRefreshToken(user).getToken())
-                .user(loginRequest.username())
+                .user(loginDto.getUsername())
                 .expires(tokenService.getExpirationInDays().toInstant())
                 .build();
     }
 
-    public AuthResponse refreshToken(RefreshTokenRequest refreshRequest) {
-        tokenService.validateRefreshToken(refreshRequest.refreshToken(), refreshRequest.username());
+    public AuthDto refreshToken(RefreshTokenDto refreshRequest) {
+        tokenService.validateRefreshToken(refreshRequest.getRefreshToken(), refreshRequest.getUsername());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return AuthResponse.builder()
+        return AuthDto.builder()
                 .jwtToken(tokenService.generateJwtToken(authentication))
-                .refreshToken(refreshRequest.refreshToken())
-                .user(refreshRequest.username())
+                .refreshToken(refreshRequest.getRefreshToken())
+                .user(refreshRequest.getUsername())
                 .expires(tokenService.getExpirationInDays().toInstant())
                 .build();
     }
 
-    public void deleteRefreshToken(RefreshTokenRequest refreshTokenRequest) {
-        tokenService.deleteRefreshToken(refreshTokenRequest.refreshToken(), refreshTokenRequest.username());
+    public void deleteRefreshToken(RefreshTokenDto refreshTokenDto) {
+        tokenService.deleteRefreshToken(refreshTokenDto.getRefreshToken(), refreshTokenDto.getUsername());
     }
 
     public User getCurrentUser(){
